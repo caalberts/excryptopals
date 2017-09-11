@@ -7,4 +7,11 @@ defmodule CryptopalsTest do
 
     assert "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t" = Cryptopals.hex_to_base64(hex)
   end
+
+  test "bitwise XOR" do
+    hex_1 = "1c0111001f010100061a024b53535009181c"
+    hex_2 = "686974207468652062756c6c277320657965"
+
+    assert "746865206b696420646f6e277420706c6179" = Cryptopals.bitwise_xor(hex_1, hex_2)
+  end
 end

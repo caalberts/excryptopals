@@ -14,4 +14,11 @@ defmodule CryptopalsTest do
 
     assert "746865206b696420646f6e277420706c6179" = Cryptopals.bitwise_xor(hex_1, hex_2)
   end
+
+  test "decrypt single-byte XOR cypher" do
+    cypher = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+
+    assert "Cooking MC's like a pound of bacon" = Cryptopals.decrypt(cypher)
+  end
+
 end

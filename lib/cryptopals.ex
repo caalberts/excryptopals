@@ -1,5 +1,5 @@
 defmodule Cryptopals do
-  alias Cryptopals.Bytes
+  alias Cryptopals.{Bytes, English}
 
   def hex_to_base64(hex) do
     hex
@@ -12,6 +12,19 @@ defmodule Cryptopals do
     |> Bytes.from_hex
     |> Bytes.xor
     |> Bytes.to_hex
+  end
+
+  def decrypt(hex) do
+    0..255
+    |> Enum.map(fn n ->
+      <<n>>
+      |> Bytes.to_hex
+      |> String.duplicate(div String.length(hex), 2)
+      |> bitwise_xor(hex)
+    end)
+    |> Enum.map(&Bytes.from_hex/1)
+    |> Enum.filter(&String.valid?/1)
+    |> Enum.min_by(&English.chi_squared/1)
   end
 
 end

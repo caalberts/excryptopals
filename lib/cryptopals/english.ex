@@ -28,17 +28,17 @@ defmodule Cryptopals.English do
     ?z => 0.00074
   }
 
-  def chi_squared(text) do
-    text
-    |> char_count 
-    |> Enum.map(&(char_score(&1, text)))
-    |> Enum.sum
+  def valid_phrases(strings) do
+    strings
+    |> Enum.filter(&String.valid?/1)
+    |> Enum.min_by(&chi_squared/1)
   end
 
-  defp char_count(text) do
+  defp chi_squared(text) do
     text
-    |> String.to_charlist
-    |> Enum.reduce(%{}, fn(char, counter) -> Map.update(counter, char, 1, &(&1 + 1)) end)
+    |> char_count
+    |> Enum.map(&(char_score(&1, text)))
+    |> Enum.sum
   end
 
   defp char_score({char, obs}, text) do
@@ -54,4 +54,15 @@ defmodule Cryptopals.English do
   defp expected(char, length) do
     Map.get(@frequency, char, 1) * length
   end
+
+  defp char_count(text) do
+    text
+    |> String.to_charlist
+    |> Enum.reduce(%{}, &count_from_one/2)
+  end
+
+  defp count_from_one(char, counter) do
+    Map.update(counter, char, 1, &(&1 + 1))
+  end
+
 end

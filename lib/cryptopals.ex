@@ -1,30 +1,22 @@
 defmodule Cryptopals do
-  alias Cryptopals.{Bytes, English}
+  alias Cryptopals.{Hex, English}
 
   def hex_to_base64(hex) do
-    hex
-    |> Bytes.from_hex
-    |> Bytes.to_base64
+    Hex.to_base64(hex)
   end
 
   def bitwise_xor(hex_1, hex_2) do
-    [hex_1, hex_2]
-    |> Bytes.from_hex
-    |> Bytes.xor
-    |> Bytes.to_hex
+    Hex.bitwise_xor(hex_1, hex_2)
   end
 
-  def decrypt(hex) do
-    0..255
-    |> Enum.map(fn n ->
-      <<n>>
-      |> Bytes.to_hex
-      |> String.duplicate(div String.length(hex), 2)
-      |> bitwise_xor(hex)
-    end)
-    |> Enum.map(&Bytes.from_hex/1)
-    |> Enum.filter(&String.valid?/1)
-    |> Enum.min_by(&English.chi_squared/1)
+  def decrypt(cyphers) when is_list(cyphers) do
+    strings = for c <- cyphers, n <- 0..255, do: Hex.single_byte_xor(c, n)
+    English.valid_phrases(strings)
+  end
+
+  def decrypt(cypher) do
+    strings = for n <- 0..255, do: Hex.single_byte_xor(cypher, n)
+    English.valid_phrases(strings)
   end
 
 end

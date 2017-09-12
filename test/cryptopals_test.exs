@@ -21,4 +21,11 @@ defmodule CryptopalsTest do
     assert "Cooking MC's like a pound of bacon" = Cryptopals.decrypt(cypher)
   end
 
+  test "detect single-character XOR" do
+    with {:ok, data} <- File.read("fixture/detect-single-char-xor.txt") do
+      cyphers = String.split(data)
+      assert "Now that the party is jumping\n" == Cryptopals.decrypt(cyphers)
+    end
+  end
+
 end
